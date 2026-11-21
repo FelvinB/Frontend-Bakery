@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import { NavLink } from 'react-router';
 import { cn } from '@/lib/cn';
+import StripePaymentModal from '@/components/payments/StripePaymentModal';
 
 const links = [
   { to: '/', label: 'Dashboard' },
@@ -14,6 +16,8 @@ const links = [
 ];
 
 export default function Sidebar() {
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+
   return (
     <aside className="flex h-full w-64 flex-col border-r border-amber-100 bg-[#fffaf3]">
       <div className="border-b border-amber-100 px-5 py-5">
@@ -40,9 +44,25 @@ export default function Sidebar() {
           </NavLink>
         ))}
       </nav>
-      <div className="border-t border-amber-100 p-4 text-xs text-stone-500">
-        Fresh insights for smarter baking decisions.
+      <div className="border-t border-amber-100 p-4">
+        <button
+          type="button"
+          onClick={() => setShowPaymentModal(true)}
+          className="w-full rounded-xl bg-stone-900 px-3 py-2.5 text-sm font-semibold text-white transition hover:bg-stone-800"
+        >
+          Test Payment Modal
+        </button>
+        <p className="mt-2 text-xs text-stone-500">Fresh insights for smarter baking decisions.</p>
       </div>
+
+      <StripePaymentModal
+        open={showPaymentModal}
+        onClose={() => setShowPaymentModal(false)}
+        orderNumber="TEST-ORD-1001"
+        description="Test bakery order payment"
+        amount={350}
+        currency="PHP"
+      />
     </aside>
   );
 }
